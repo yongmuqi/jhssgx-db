@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>基金持仓实时收益率（图片识别版）</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        body {
+            background: #f5f7fa;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .container {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 24px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            color: #333;
+        }
+        .total {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .total-item {
+            text-align: center;
+        }
+        .total-item .label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+        .total-item .value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        .value.profit {
+            color: #e63946;
+        }
+        .value.loss {
+            color: #2a9d8f;
+        }
+        .operate-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        .add-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            flex: 1;
+            min-width: 300px;
+        }
+        .ocr-upload {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .add-form input, .ocr-upload input {
+            flex: 1;
+            min-width: 120px;
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            outline: none;
+        }
+        .add-form input:focus {
+            border-color: #4f46e5;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .btn-primary {
+            background: #4f46e5;
+            color: #fff;
+        }
+        .btn-refresh {
+            background: #f97316;
+            color: #fff;
+        }
+        .btn-clear {
+            background: #ef4444;
+            color: #fff;
+        }
+        .btn-del {
+            background: #fecdd3;
+            color: #ef4444;
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+        .btn-edit {
+            background: #dbeafe;
+            color: #3b82f6;
+            padding: 4px 8px;
+            font-size: 12px;
+            margin-right: 4px;
+        }
+        .btn-ocr {
+            background: #10b981;
+            color: #fff;
+        }
+        .btn-import {
+            background: #6366f1;
+            color: #fff;
+            margin: 0 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        th, td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+        td {
+            color: #666;
+        }
+        .empty {
+            text-align: center;
+            padding: 48px 0;
+            color: #999;
+            font-size: 16px;
+        }
+        .ocr-preview {
+            margin: 20px 0;
+            padding: 16px;
+            border: 1px dashed #e5e7eb;
+            border-radius: 8px;
+            display: none;
+        }
+        .ocr-preview.show {
+            display: block;
+        }
+        .ocr-preview h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .ocr-table td, .ocr-table th {
+            padding: 8px 6px;
+            font-size: 14px;
+        }
+        .img-preview {
+            max-width: 200px;
+            max-height: 150px;
+            border-radius: 4px;
+            margin: 0 auto;
+            display: block;
+        }
+        @media (max-width: 768px) {
+            th, td {
+                padding: 8px 4px;
+                font-size: 12px;
+            }
+            .operate-bar, .add-form, .ocr-upload {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btn {
+                width: 100%;
+            }
+            .btn-import {
+                margin: 8px 0;
